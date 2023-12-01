@@ -4,6 +4,11 @@ on:
   push:
     branches: [ "master" ]
 
+env:
+    REGISTRY: roxsross12
+    IMAGE_NAME: ${{ github.event.repository.name }}
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +19,10 @@ jobs:
     - name: docker build
       run: |
         cd vote
-        docker build -t roxsross12/vote-app:1.0.0 .
+        docker build -t $REGISTRY/$IMAGE_NAME:vote-1.0.0 .
+        cd result
+        docker build -t $REGISTRY/$IMAGE_NAME:result-1.0.0 .
+        cd worker
+        docker build -t $REGISTRY/$IMAGE_NAME:worker-1.0.0 .
     - name: docker images
-      run: docker images
+      run: docker images | grep $REGISTRY/$IMAGE_NAME

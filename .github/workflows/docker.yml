@@ -11,3 +11,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: check listar
       run: ls
+    - name: docker build
+      run: |
+        cd vote
+        docker build -t roxsross12/vote-app:1.0.0 .
+    - name: docker images
+      run: docker images

@@ -2,27 +2,24 @@ name: CICD
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 
 env:
-    REGISTRY: roxsross12
-    IMAGE_NAME: ${{ github.event.repository.name }}
-
+  REGISTRY: roxsross12
+  IMAGE_NAME: ${{ github.event.repository.name }}
+  VERSION: 1.0.0
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: check listar
-      run: ls
-    - name: docker build
-      run: |
-        cd vote
-        docker build -t $REGISTRY/$IMAGE_NAME:vote-1.0.0 .
-        cd result
-        docker build -t $REGISTRY/$IMAGE_NAME:result-1.0.0 .
-        cd worker
-        docker build -t $REGISTRY/$IMAGE_NAME:worker-1.0.0 .
-    - name: docker images
-      run: docker images | grep $REGISTRY/$IMAGE_NAME
+      - uses: actions/checkout@v4
+
+      - name: Build and Tag Images
+        run: |
+          for service in vote result worker; do
+            docker build -t $REGISTRY/$IMAGE_NAME:$service-$VERSION ./$service
+          done
+
+      - name: List Images
+        run: docker images | grep $REGISTRY/$IMAGE_NAME

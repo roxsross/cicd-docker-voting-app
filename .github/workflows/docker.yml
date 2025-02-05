@@ -18,7 +18,7 @@ jobs:
       - name: Build and Tag Images
         run: |
           for service in vote result worker; do
-            docker build -t $REGISTRY/$IMAGE_NAME:$service-$VERSION ./$service
+            docker build $REGISTRY/$IMAGE_NAME:$service-$VERSION ./$service
           done
 
       - name: List Images
